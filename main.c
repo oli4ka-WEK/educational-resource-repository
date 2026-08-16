@@ -1,11 +1,12 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
+// Максимален брой символи за заглавие, автор и предмет
 #define MAX_STRING 100
+// Максимален брой ресурси в хранилището
 #define MAX_RESOURCES 50
 
-// Custom data type using CS50-style typedef struct
+// Структура, обединяваща данните за един учебен ресурс
 typedef struct {
     int id;
     char title[MAX_STRING];
@@ -13,57 +14,7 @@ typedef struct {
     char subject[MAX_STRING];
 } Resource;
 
-// Function prototypes
-void add_resource(Resource repository[], int *count);
-void display_resources(const Resource repository[], int count);
-void search_by_subject(const Resource repository[], int count);
-void save_to_file(const Resource repository[], int count, const char *filename);
-
-int main(void) {
-    Resource repository[MAX_RESOURCES];
-    int count = 0;
-    int choice;
-
-    while (1) {
-        printf("\n====================================\n");
-        printf(" EDUCATIONAL RESOURCE REPOSITORY\n");
-        printf("====================================\n");
-        printf("1. Add New Resource\n");
-        printf("2. View All Resources\n");
-        printf("3. Search Resources by Subject\n");
-        printf("4. Export Resources to File\n");
-        printf("5. Exit\n");
-        printf("Enter choice (1-5): ");
-
-        if (scanf("%d", &choice) != 1) {
-            printf("Invalid input. Exiting...\n");
-            break;
-        }
-        getchar(); // Clear trailing newline from buffer
-
-        switch (choice) {
-            case 1:
-                add_resource(repository, &count);
-                break;
-            case 2:
-                display_resources(repository, count);
-                break;
-            case 3:
-                search_by_subject(repository, count);
-                break;
-            case 4:
-                save_to_file(repository, count, "repository.txt");
-                break;
-            case 5:
-                printf("Exiting system. Goodbye!\n");
-                return 0;
-            default:
-                printf("Invalid choice! Please select 1-5.\n");
-        }
-    }
-    return 0;
-}
-
+// Функция за добавяне на нов ресурс
 void add_resource(Resource repository[], int *count) {
     if (*count >= MAX_RESOURCES) {
         printf("\nError: Repository capacity reached (%d items).\n", MAX_RESOURCES);
@@ -75,7 +26,7 @@ void add_resource(Resource repository[], int *count) {
 
     printf("\nEnter Resource Title: ");
     fgets(new_res.title, MAX_STRING, stdin);
-    new_res.title[strcspn(new_res.title, "\n")] = '\0'; // Trim newline
+    new_res.title[strcspn(new_res.title, "\n")] = '\0';
 
     printf("Enter Author/Instructor: ");
     fgets(new_res.author, MAX_STRING, stdin);
@@ -91,7 +42,8 @@ void add_resource(Resource repository[], int *count) {
     printf("Success: Resource added with ID #%d!\n", new_res.id);
 }
 
-void display_resources(const Resource repository[], int count) {
+// Функция за показване на всички ресурси
+void display_resources(Resource repository[], int count) {
     if (count == 0) {
         printf("\nRepository is currently empty.\n");
         return;
@@ -108,7 +60,8 @@ void display_resources(const Resource repository[], int count) {
     }
 }
 
-void search_by_subject(const Resource repository[], int count) {
+// Функция за търсене на ресурси по предмет
+void search_by_subject(Resource repository[], int count) {
     if (count == 0) {
         printf("\nRepository is currently empty.\n");
         return;
@@ -122,7 +75,6 @@ void search_by_subject(const Resource repository[], int count) {
     int found = 0;
     printf("\n--- Search Results for '%s' ---\n", query);
     for (int i = 0; i < count; i++) {
-        // Case-sensitive substring search (CS50 Week 2 / string techniques)
         if (strstr(repository[i].subject, query) != NULL) {
             printf("ID: %d | Title: %s | Author: %s\n", 
                    repository[i].id, 
@@ -137,9 +89,9 @@ void search_by_subject(const Resource repository[], int count) {
     }
 }
 
-void save_to_file(const Resource repository[], int count, const char *filename) {
-    // Basic File I/O (CS50 Week 4)
-    FILE *file = fopen(filename, "w");
+// Функция за записване на данните във файл
+void save_to_file(Resource repository[], int count) {
+    FILE *file = fopen("repository.txt", "w");
     if (file == NULL) {
         printf("Error: Could not open file for writing.\n");
         return;
@@ -154,5 +106,50 @@ void save_to_file(const Resource repository[], int count, const char *filename) 
     }
 
     fclose(file);
-    printf("Saved %d item(s) to '%s' successfully!\n", count, filename);
+    printf("Saved %d item(s) to 'repository.txt' successfully!\n", count);
+}
+
+int main(void) {
+    // Списък с ресурсите и брояч за тях
+    Resource repository[MAX_RESOURCES];
+    int count = 0;
+    int choice;
+
+    // Главно меню на програмата
+    while (1) {
+        printf("\n=== EDUCATIONAL RESOURCE REPOSITORY ===\n");
+        printf("1. Add New Resource\n");
+        printf("2. View All Resources\n");
+        printf("3. Search Resources by Subject\n");
+        printf("4. Export Resources to File\n");
+        printf("5. Exit\n");
+        printf("Enter choice (1-5): ");
+
+        if (scanf("%d", &choice) != 1) {
+            printf("Invalid input. Exiting...\n");
+            break;
+        }
+        getchar();
+
+        switch (choice) {
+            case 1:
+                add_resource(repository, &count);
+                break;
+            case 2:
+                display_resources(repository, count);
+                break;
+            case 3:
+                search_by_subject(repository, count);
+                break;
+            case 4:
+                save_to_file(repository, count);
+                break;
+            case 5:
+                printf("Exiting system. Goodbye!\n");
+                return 0;
+            default:
+                printf("Invalid choice! Please select 1-5.\n");
+        }
+    }
+    return 0;
 }
