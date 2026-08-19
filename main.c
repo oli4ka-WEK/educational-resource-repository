@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <string.h>
 
-// Максимален брой символи за заглавие, автор и предмет
+// Максимален брой символи за заглавие автор и предмет
 #define MAX_STRING 100
 // Максимален брой ресурси в хранилището
 #define MAX_RESOURCES 50
 
-// Структура, обединяваща данните за един учебен ресурс
+// Структура обединяваща данните за един учебен ресурс
 typedef struct {
     int id;
     char title[MAX_STRING];
@@ -28,11 +28,11 @@ void add_resource(Resource repository[], int *count) {
     fgets(new_res.title, MAX_STRING, stdin);
     new_res.title[strcspn(new_res.title, "\n")] = '\0';
 
-    printf("Enter Author/Instructor: ");
+    printf("Enter Author: ");
     fgets(new_res.author, MAX_STRING, stdin);
     new_res.author[strcspn(new_res.author, "\n")] = '\0';
 
-    printf("Enter Subject (e.g., CS50, Math, Physics): ");
+    printf("Enter Subject (e.g., Biology, Math, Physics): ");
     fgets(new_res.subject, MAX_STRING, stdin);
     new_res.subject[strcspn(new_res.subject, "\n")] = '\0';
 
@@ -93,7 +93,7 @@ void search_by_subject(Resource repository[], int count) {
 void save_to_file(Resource repository[], int count) {
     FILE *file = fopen("repository.txt", "w");
     if (file == NULL) {
-        printf("Error: Could not open file for writing.\n");
+        printf("Error: Could not save file.\n");
         return;
     }
 
@@ -121,7 +121,7 @@ int main(void) {
         printf("1. Add New Resource\n");
         printf("2. View All Resources\n");
         printf("3. Search Resources by Subject\n");
-        printf("4. Export Resources to File\n");
+        printf("4. Save Resources to File\n");
         printf("5. Exit\n");
         printf("Enter choice (1-5): ");
 
