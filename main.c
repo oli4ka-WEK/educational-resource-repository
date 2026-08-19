@@ -1,10 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 
+
+
 // Максимален брой символи за заглавие автор и предмет
 #define MAX_STRING 100
 // Максимален брой ресурси в хранилището
 #define MAX_RESOURCES 50
+
 
 // Структура обединяваща данните за един учебен ресурс
 typedef struct {
@@ -13,6 +16,8 @@ typedef struct {
     char author[MAX_STRING];
     char subject[MAX_STRING];
 } Resource;
+
+
 
 // Функция за добавяне на нов ресурс
 void add_resource(Resource repository[], int *count) {
@@ -24,23 +29,30 @@ void add_resource(Resource repository[], int *count) {
     Resource new_res;
     new_res.id = *count + 1;
 
+    
     printf("\nEnter Resource Title: ");
     fgets(new_res.title, MAX_STRING, stdin);
     new_res.title[strcspn(new_res.title, "\n")] = '\0';
 
+
+    
     printf("Enter Author: ");
     fgets(new_res.author, MAX_STRING, stdin);
     new_res.author[strcspn(new_res.author, "\n")] = '\0';
 
+    
     printf("Enter Subject (e.g., Biology, Math, Physics): ");
     fgets(new_res.subject, MAX_STRING, stdin);
     new_res.subject[strcspn(new_res.subject, "\n")] = '\0';
 
+    
     repository[*count] = new_res;
     (*count)++;
 
     printf("Success: Resource added with ID #%d!\n", new_res.id);
 }
+
+
 
 // Функция за показване на всички ресурси
 void display_resources(Resource repository[], int count) {
@@ -60,6 +72,8 @@ void display_resources(Resource repository[], int count) {
     }
 }
 
+
+
 // Функция за търсене на ресурси по предмет
 void search_by_subject(Resource repository[], int count) {
     if (count == 0) {
@@ -72,6 +86,7 @@ void search_by_subject(Resource repository[], int count) {
     fgets(query, MAX_STRING, stdin);
     query[strcspn(query, "\n")] = '\0';
 
+    
     int found = 0;
     printf("\n--- Search Results for '%s' ---\n", query);
     for (int i = 0; i < count; i++) {
@@ -84,10 +99,13 @@ void search_by_subject(Resource repository[], int count) {
         }
     }
 
+    
     if (!found) {
         printf("No matching resources found for subject '%s'.\n", query);
     }
 }
+
+
 
 // Функция за записване на данните във файл
 void save_to_file(Resource repository[], int count) {
@@ -97,6 +115,7 @@ void save_to_file(Resource repository[], int count) {
         return;
     }
 
+    
     for (int i = 0; i < count; i++) {
         fprintf(file, "ID: %d | Title: %s | Author: %s | Subject: %s\n",
                 repository[i].id, 
@@ -109,12 +128,15 @@ void save_to_file(Resource repository[], int count) {
     printf("Saved %d item(s) to 'repository.txt' successfully!\n", count);
 }
 
+
+
 int main(void) {
     // Списък с ресурсите и брояч за тях
     Resource repository[MAX_RESOURCES];
     int count = 0;
     int choice;
 
+    
     // Главно меню на програмата
     while (1) {
         printf("\n=== EDUCATIONAL RESOURCE REPOSITORY ===\n");
@@ -129,8 +151,11 @@ int main(void) {
             printf("Invalid input. Exiting...\n");
             break;
         }
+        
         getchar();
 
+
+        
         switch (choice) {
             case 1:
                 add_resource(repository, &count);
